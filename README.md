@@ -28,7 +28,6 @@ Underlying data set is sourced from ECB and covers daily European AAA-rated gove
 ### Principal Component Analysis
 asdfasdfaslkjdglökjsdlfgsdfg
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", height = "290">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", height = "300">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", height = "290"> <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", height = "300">
 </p>
 
