@@ -45,6 +45,4 @@ In order to explore any short-term predictability of the PCs, several models hav
 </p>
 
 ### Conclusion
-None of the algorithms were significantly outperforming a naive forecast over a longer period of time. With a few exceptions, the short-term variations in yield curves are too stochastic and small, that any of the models could outperform. However, more research can be done by extending the predicition horizon, or implementing partial differencing in the time series models.
-
-
+None of the algorithms were significantly outperforming a naive forecast over a longer period of time. With a few exceptions, the short-term variations in yield curves are too stochastic and small, that any of the models could outperform. However, more research can be done by extending the predicition horizon, or by implementing partial differencing into the time series model.
