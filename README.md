@@ -22,8 +22,8 @@ Underlying data set is sourced from ECB and covers daily European AAA-rated gove
 
 <table style="width:100%">
   <tr>
-    <td><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", width = "410"></td>
-    <td><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png", width = "500"></td>
+    <td align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", height = "250"></td>
+    <td align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png", height = "250"></td>
   </tr>
 </table>
 
