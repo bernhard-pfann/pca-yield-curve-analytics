@@ -44,6 +44,7 @@ In order to explore any short-term predictability of the PCs, several models hav
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/10_nelson_siegel_forecast.png", width = "500">
 </p>
 
- None of the algorithms were significantly outperforming a naive forecast over a longer period of time. 
+### Conclusion
+None of the algorithms were significantly outperforming a naive forecast over a longer period of time. With a few exceptions, the short-term variations in yield curves are too stochastic and small, that any of the models could outperform. However, more research can be done by extending the predicition horizon, or implementing partial differencing in the time series models.
 
 
