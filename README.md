@@ -26,12 +26,13 @@ Underlying data set is sourced from ECB and covers daily European AAA-rated gove
 </p>
 
 ### Principal Component Analysis
-By deriving the yield curves' underlying principal components, its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors.
-
-Furthermore a connection of the first 3 PCs to the classical yield curve factors <i>"level", "steepness", "curvature"</i> can be established.
+By deriving the yield curves' underlying principal components, its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", width = "500"><br>
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/06_pc_interpret.png, width = "500">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/06_pc_interpret.png", width = "500">
 </p>
+
+### Time Series Model
+
 
