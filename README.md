@@ -21,14 +21,17 @@ The script is split into 5 notebooks, representing separate tasks within the pro
 Underlying data set is sourced from ECB and covers daily European AAA-rated government bond yields over the last 15 years. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", height = "310">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png", height = "310">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png", width = "500">
 </p>
 
 ### Principal Component Analysis
-By deriving the underlying principal components, its can be shown that already the first 3 are able to explain more than 95% of total yield curve volatility. Thus for certain applications it might be sufficient to work with these limited 
+By deriving the yield curves' underlying principal components, its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors.
+
+Furthermore a connection of the first 3 PCs to the classical yield curve factors <i>"level", "steepness", "curvature"</i> can be established.
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", height = "270"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", height = "270">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/06_pc_interpret.png, width = "500">
 </p>
 
