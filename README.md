@@ -14,7 +14,7 @@ The script is split into 5 notebooks, representing separate tasks within the pro
 - Ensemble model
 
 <p align="center">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/workflow.PNG" width="600"> 
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/workflow.PNG"> 
 </p>
 
 ### Data
