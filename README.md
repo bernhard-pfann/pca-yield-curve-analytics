@@ -26,13 +26,24 @@ Underlying data set is sourced from ECB and covers daily European AAA-rated gove
 </p>
 
 ### Principal Component Analysis
-By deriving the yield curves' underlying principal components, its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
+By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/06_pc_interpret.png", width = "500">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", width = "500">
 </p>
 
-### Time Series Model
+### Predictive Models
+In order to explore any short-term predictability of the PCs, several models have been tested. All of them forecast PC's which generate full yield curve predictions by back-transforming PC's to their original dimensional form.
+
+- **Auto-regressive (AR) model:** Predicting future PC's from its own past lags. Standard tests for time series regarding stationaritay and causality had to be applied.
+- **Dynamic Nelson-Siegel (DNS) model:** Takes the yield curve parameters specified by Nelson-Siegel and runs an VAR-model. This serves as a benchmark.
+- **Extreme Gradient Boosting model:** By converting the time series into a cross-sectional format, an ensemble can be applied as well.
+
+<p align="center"> 
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/08_stationary2.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/10_nelson_siegel_forecast.png", width = "500">
+</p>
+
+ None of the algorithms were significantly outperforming a naive forecast over a longer period of time. 
 
 
