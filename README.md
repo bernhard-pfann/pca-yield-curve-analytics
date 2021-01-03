@@ -21,13 +21,13 @@ The script is split into 5 notebooks, representing separate tasks within the pro
 Underlying data set is sourced from ECB and covers daily European AAA-rated government bond yields over the last 15 years. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", height = "290">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", height = "295">
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png", height = "300">
 </p>
 
 ### Principal Component Analysis
 asdfasdfaslkjdglökjsdlfgsdfg
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", height = "250"> <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", height = "250">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", height = "260"> <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", height = "260">
 </p>
 
