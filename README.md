@@ -18,4 +18,9 @@ The script is split into 5 notebooks, representing separate tasks within the pro
 </p>
 
 ### Data
-European AAA-rated government bond yields has been undertaken. Different variations of models are being suggested, and finally tested against appropriate benchmarks.
+Underlying data set is sourced from ECB and covers daily European AAA-rated government bond yields over the last 15 years. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
+
+<p align="center">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png"><br><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png">
+</p>
