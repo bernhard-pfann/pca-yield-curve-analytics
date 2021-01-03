@@ -26,7 +26,7 @@ Underlying data set is sourced from ECB and covers daily European AAA-rated gove
 </p>
 
 ### Principal Component Analysis
-asdfasdfaslkjdglökjsdlfgsdfg
+By deriving the underlying principal components, its can be shown that already the first 3 are able to explain more than 95% of total yield curve volatility. Thus for certain applications it might be sufficient to work with these limited 
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", height = "270"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", height = "270">
