@@ -21,15 +21,15 @@ The script is split into 5 notebooks, representing separate tasks within the pro
 Underlying data set is sourced from ECB and covers daily European AAA-rated government bond yields over the last 15 years. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/01_yield_curve.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/02_yields.png", width = "500">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/yield-curve.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/yields.png", width = "500">
 </p>
 
 ### Principal Component Analysis
 By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/04_pc_loadings.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/05_pc_scores.png", width = "500">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-loadings.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-scores.png", width = "500">
 </p>
 
 ### Predictive Models
@@ -40,8 +40,8 @@ In order to explore any short-term predictability of the PCs, several models hav
 - **Extreme Gradient Boosting model:** By converting the time series into a cross-sectional format, an ensemble can be applied as well.
 
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/08_stationary2.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/05-images/10_nelson_siegel_forecast.png", width = "500">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/stationary-2.png", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/nelson-siegel-forecast.png", width = "500">
 </p>
 
 ### Conclusion
