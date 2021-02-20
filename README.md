@@ -44,5 +44,5 @@ In order to explore any short-term predictability of the PCs, and autoregressive
 
 <p align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-pred-eval.png"></p><br>
 
-Python Version: 3.7
-Packages: pandas, numpy, datetime, sklearn, statsmodels, matplotlib, seaborn, ipywidgets, warnings
+<b>Python Version:</b> 3.7<br>
+<b>Packages:</b> pandas, numpy, datetime, sklearn, statsmodels, matplotlib, seaborn, ipywidgets, warnings
