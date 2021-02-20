@@ -1,31 +1,36 @@
 # Predictive Yield Curve Modeling in Reduced Dimensionality
+<i>An Application of Principal Component Analysis to euro yield curves</i>
+***
+The term structure of interest rates (“yield curve”) is a representation that plots bonds of the same type (e.g. credit quality, sector) in terms of their prices, expressed as yields, over different maturity dates. This project sets out to study the yield curve dynamics in reduced dimensionality. In literature Principal Component Analysis (PCA) is a known application to this use case.
 
-### Research Goal
-The term structure of interest rates (“yield curve”) is a representation that plots bonds of the same type (e.g. credit quality, sector) in terms of their prices, expressed as yields, over different maturity dates.
+<u>After a successful yield curve decomposition the following topics will be tackled:</u>
+- Supporting the interpretation of the first 3 principal components (PCs) in accordance with traditional (shift,slope,curvature) factors
+- Testing out-of-sample fit for model yield curves, generated from reduced principal components set
+- Derivation of non-linear stress scenarios for each component (1-month ahead 95% confidence)
+- Testing predictability with an autoregressive timeseries model
 
-The aim of this project is to study yield curve dynamics in reduced dimensionality by applying principal components analysis (PCA). An interpretation for the driving factors, as well as the capability to mimic actual yield curves shall be assessed. Furthermore, the short-term predictive power of these extracted factors is explored. While many econometric forecasting models struggle with the vast number of variables that highly increase complexity and thus uncertainty, the suggested approach makes use of the compressed feature set. 
 
 ### Project Structure
-The script is split into 5 notebooks, representing separate tasks within the project workflow:
-- Data preparation
-- Principal component analysis
-- Time series model
-- Time series benchmark model
-- Ensemble model
+The script can be executed via "main.ipynb" and thereby calls custom modules:
+- yieldcurves.py >> Cleaning of raw input put from source
+- principalcomponents.py >> Object class that conducts all transformations of PCs
+- autoregressive.py >> Object class fits a time series model and returns predictions, based on a simple autoregressive-process
 
 <p align="center">
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/workflow.PNG"> 
 </p>
 
+
 ### Data
-Underlying data set is sourced from ECB and covers daily European AAA-rated government bond yields over the last 15 years. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
+Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/yield-curve.png", width = "500"><br>
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/yields.png", width = "500">
 </p>
 
-### Principal Component Analysis
+
+### Interpreting Principal Component Analysis
 By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-loadings.png", width = "500"><br>
