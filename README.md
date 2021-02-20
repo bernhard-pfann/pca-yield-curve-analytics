@@ -42,4 +42,7 @@ Since it has been proven, that few PCs are able to capture the majority of yield
 ### 4. Predictive Model
 In order to explore any short-term predictability of the PCs, and autoregressive model is derived to forecast the main PCs one-step-ahead. The model is benchmarked against a naive (no change) forecast. The benchmark can be outperformed by a small margin, since lagged coefficients shown statistical significance, but are small in size.
 
-<p align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-pred-eval.png"></p>
+<p align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-pred-eval.png"></p><br>
+
+Python Version: 3.7
+Packages: pandas, numpy, datetime, sklearn, statsmodels, matplotlib, seaborn, ipywidgets, warnings
