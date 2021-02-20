@@ -21,10 +21,8 @@ The script can be executed via "main.ipynb" and thereby calls custom modules:
 
 ### 1. Interpreting Principal Component Analysis
 By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
-<p align="center">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores-dyn.gif">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-interpret.png"><br>
-</p>
+
+<p align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores-dyn.gif"></p>
 
 
 ### 2. Out-Of-Sample Fit
