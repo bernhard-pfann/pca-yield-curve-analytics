@@ -9,10 +9,9 @@ The term structure of interest rates (“yield curve”) is a representation tha
 - Testing predictability with an autoregressive timeseries model
 
 ### Data
-Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
+Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from Jan-2015 to Dec-2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif"></p>
-
 
 ### Project Structure
 The script can be executed via "main.ipynb" and thereby calls custom modules:
@@ -20,16 +19,21 @@ The script can be executed via "main.ipynb" and thereby calls custom modules:
 - principalcomponents.py --> Object class that conducts all transformations of PCs
 - autoregressive.py --> Object class fits a time series model and returns predictions, based on a simple autoregressive-process
 
-
-
-
-
 ### Interpreting Principal Component Analysis
 By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
 <p align="center">
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores.png", width = "600">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-interpret.png", width = "600"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-interpret.png", width = "600"><br>
 </p>
+
+### Out-Of-Sample Fit
+By comparing the derived model curves with actual yield curves, the goodness-of-fit can be evaluated. It can be shown that especially regular non-inverting curves can be fitted with a limited number of components, while special cases required higher dimensionality, or potential oversampling of these extreme cases.
+
+<p align="center"> 
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-fit-dyn.gif">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-fit-oos.png", width = "600">
+</p>
+
 
 ### Predictive Models
 In order to explore any short-term predictability of the PCs, several models have been tested. All of them forecast PC's which generate full yield curve predictions by back-transforming PC's to their original dimensional form.
