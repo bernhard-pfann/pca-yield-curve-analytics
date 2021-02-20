@@ -1,5 +1,4 @@
 # Predictive Yield Curve Modeling in Reduced Dimensionality
-<i>An Application of Principal Component Analysis to euro yield curves</i><br>
 
 The term structure of interest rates (“yield curve”) is a representation that plots bonds of the same type (e.g. credit quality, sector) in terms of their prices, expressed as yields, over different maturity dates. This project sets out to study the yield curve dynamics in reduced dimensionality. In literature Principal Component Analysis (PCA) is a known application to this use case.
 
@@ -12,9 +11,7 @@ The term structure of interest rates (“yield curve”) is a representation tha
 ### Data
 Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
-<p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif"><br>
-</p>
+<p align="center"> <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif"></p>
 
 
 ### Project Structure
@@ -29,9 +26,9 @@ The script can be executed via "main.ipynb" and thereby calls custom modules:
 
 ### Interpreting Principal Component Analysis
 By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
-<p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-loadings.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-scores.png", width = "500">
+<p align="center">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores.png", width = "600">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/pc-interpret.png", width = "600"><br>
 </p>
 
 ### Predictive Models
