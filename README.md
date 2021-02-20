@@ -1,6 +1,6 @@
 # Predictive Yield Curve Modeling in Reduced Dimensionality
 <i>An Application of Principal Component Analysis to euro yield curves</i>
-***
+
 The term structure of interest rates (“yield curve”) is a representation that plots bonds of the same type (e.g. credit quality, sector) in terms of their prices, expressed as yields, over different maturity dates. This project sets out to study the yield curve dynamics in reduced dimensionality. In literature Principal Component Analysis (PCA) is a known application to this use case.
 
 <u>After a successful yield curve decomposition the following topics will be tackled:</u>
