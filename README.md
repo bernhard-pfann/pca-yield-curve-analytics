@@ -29,7 +29,6 @@ By deriving the yield curves' underlying principal components (PCs), its can be 
 
 ### 2) Out-Of-Sample Fit
 By comparing the derived model curves with actual yield curves, the goodness-of-fit can be evaluated. It can be shown that especially regular non-inverting curves can be fitted with a limited number of components, while special cases required higher dimensionality, or potential oversampling of these extreme cases.
-
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-fit-dyn.gif">
 </p>
@@ -37,24 +36,10 @@ By comparing the derived model curves with actual yield curves, the goodness-of-
 
 ### 3) Stress Scenarios
 Since it has been proven, that few PCs are able to capture the majority of yield curve variance, realistic stress scenarios can be derived from them. By assessing the variation of each of the first 3 PCs, shock scenarios for a 1-month 95% confidence intervall have been derived.
-
-<p align="center">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores-stress.png">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-stress.png">
-</p>
+<p align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-stress.png"></p>
 
 
-### 4) Predictive Models
-In order to explore any short-term predictability of the PCs, several models have been tested. All of them forecast PC's which generate full yield curve predictions by back-transforming PC's to their original dimensional form.
+### 4) Predictive Model
+In order to explore any short-term predictability of the PCs, and autoregressive model is derived to forecast the main PCs one-step-ahead. The model is benchmarked against a naive (no change) forecast. The benchmark can be outperformed by a small margin, since lagged coefficients shown statistical significance, but are small in size.
 
-- **Auto-regressive (AR) model:** Predicting future PC's from its own past lags. Standard tests for time series regarding stationaritay and causality had to be applied.
-- **Dynamic Nelson-Siegel (DNS) model:** Takes the yield curve parameters specified by Nelson-Siegel and runs an VAR-model. This serves as a benchmark.
-- **Extreme Gradient Boosting model:** By converting the time series into a cross-sectional format, an ensemble can be applied as well.
-
-<p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/stationary-2.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/nelson-siegel-forecast.png", width = "500">
-</p>
-
-### Conclusion
-None of the algorithms were significantly outperforming a naive forecast over a longer period of time. With a few exceptions, the short-term variations in yield curves are too stochastic and small, that any of the models could outperform. However, more research can be done by extending the predicition horizon, or by implementing partial differencing into the time series model.
+<p align="center"><img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-pred-eval.png"></p>
