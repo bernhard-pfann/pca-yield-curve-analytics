@@ -9,6 +9,13 @@ The term structure of interest rates (“yield curve”) is a representation tha
 - Derivation of non-linear stress scenarios for each component (1-month ahead 95% confidence)
 - Testing predictability with an autoregressive timeseries model
 
+### Data
+Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
+
+<p align="center"> 
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif"><br>
+</p>
+
 
 ### Project Structure
 The script can be executed via "main.ipynb" and thereby calls custom modules:
@@ -17,12 +24,7 @@ The script can be executed via "main.ipynb" and thereby calls custom modules:
 - autoregressive.py --> Object class fits a time series model and returns predictions, based on a simple autoregressive-process
 
 
-### Data
-Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
-<p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif"><br>
-</p>
 
 
 ### Interpreting Principal Component Analysis
