@@ -22,8 +22,8 @@ The script can be executed via "main.ipynb" and thereby calls custom modules:
 ### Interpreting Principal Component Analysis
 By deriving the yield curves' underlying principal components (PCs), its can be shown that already the first 3 are able to explain more than 95% of total yield curve variance. Thus for certain applications it might be sufficient to only work with these limited number of factors. Furthermore a connection between the first 3 PCs to the classical yield curve factors "level", "slope", "curvature" can be established.
 <p align="center">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores.png", width = "600">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-interpret.png", width = "600"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-scores.png", width = "700">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-interpret.png", width = "700"><br>
 </p>
 
 ### Out-Of-Sample Fit
@@ -31,9 +31,11 @@ By comparing the derived model curves with actual yield curves, the goodness-of-
 
 <p align="center"> 
   <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-fit-dyn.gif">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-fit-oos.png", width = "600">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/pc-fit-oos.png", width = "700">
 </p>
 
+### Stress Scenarios
+Since it has been proven, that few PCs are able to capture the majority of yield curve variance, realistic stress scenarios can be derived from them. By assessing the variation of each of the first 3 PCs, shock scenarios for a 95% confidence intervall have been derived. 
 
 ### Predictive Models
 In order to explore any short-term predictability of the PCs, several models have been tested. All of them forecast PC's which generate full yield curve predictions by back-transforming PC's to their original dimensional form.
