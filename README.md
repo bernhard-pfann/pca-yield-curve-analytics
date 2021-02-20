@@ -21,7 +21,7 @@ The script can be executed via "main.ipynb" and thereby calls custom modules:
 Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif", width = "500"><br>
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif"><br>
 </p>
 
 
