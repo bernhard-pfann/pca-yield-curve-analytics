@@ -1,5 +1,5 @@
 # Predictive Yield Curve Modeling in Reduced Dimensionality
-<i>An Application of Principal Component Analysis to euro yield curves</i>
+<i>An Application of Principal Component Analysis to euro yield curves</i><br>
 
 The term structure of interest rates (“yield curve”) is a representation that plots bonds of the same type (e.g. credit quality, sector) in terms of their prices, expressed as yields, over different maturity dates. This project sets out to study the yield curve dynamics in reduced dimensionality. In literature Principal Component Analysis (PCA) is a known application to this use case.
 
@@ -12,21 +12,16 @@ The term structure of interest rates (“yield curve”) is a representation tha
 
 ### Project Structure
 The script can be executed via "main.ipynb" and thereby calls custom modules:
-- yieldcurves.py >> Cleaning of raw input put from source
-- principalcomponents.py >> Object class that conducts all transformations of PCs
-- autoregressive.py >> Object class fits a time series model and returns predictions, based on a simple autoregressive-process
-
-<p align="center">
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/workflow.PNG"> 
-</p>
+- yieldcurves.py --> Cleaning of raw input put from source
+- principalcomponents.py --> Object class that conducts all transformations of PCs
+- autoregressive.py --> Object class fits a time series model and returns predictions, based on a simple autoregressive-process
 
 
 ### Data
 Underlying data set is sourced from ECB and covers daily Euro area AAA-rated government spot rate yield curves. They selected time horizon starts from 01-01-2015 to 31.12.2020 on a daily basis. https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
 
 <p align="center"> 
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/yield-curve.png", width = "500"><br>
-  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/readme/yields.png", width = "500">
+  <img src="https://github.com/bernhard-pfann/pca-yield-curve-analytics/blob/main/assets/img/yields-dyn.gif", width = "500"><br>
 </p>
 
 
