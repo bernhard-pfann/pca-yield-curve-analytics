@@ -9,16 +9,16 @@ class PCA(object):
     a few of the newly established dimensions, the backtransformation (func:pca_backtrans) into original units creates a lower 
     dimensional data model. 
     """
-    def __init__(self, spot, maturities, k):
+    def __init__(self, df, k):
         """
         Required parameters:
-        - spot: DataFrame()
+        - df: DataFrame()
         - maturities: List >> Given maturities
         - k: Int >> Number of retained PCs
         """
-        self.spot = spot
-        self.mat  = maturities
-        self.k    = k
+        self.df = df
+        self.mat = df.columns
+        self.k = k
         
         self.pca_cov()
         self.pca_eig()
@@ -29,11 +29,12 @@ class PCA(object):
         """
         This function calculates the covariance matrix of all given maturities to each other over time whole time horizon.
         """
-        self.cov_matr = np.array(self.spot).T
+        self.cov_matr = np.array(self.df).T
         self.cov_matr = np.cov(self.cov_matr, bias = True)
-        self.cov_matr = pd.DataFrame(data    = self.cov_matr, 
-                                     columns = self.mat, 
-                                     index   = self.mat)
+        self.cov_matr = pd.DataFrame(
+            data    = self.cov_matr, 
+            columns = self.mat, 
+            index   = self.mat)
         
         
     def pca_eig(self):
@@ -65,10 +66,10 @@ class PCA(object):
         """
     
         # PC scores (all)
-        self.eig_scores = np.matrix(self.spot) * np.matrix(self.eig_vect)
+        self.eig_scores = np.matrix(self.df) * np.matrix(self.eig_vect)
         self.eig_scores = pd.DataFrame(data    = self.eig_scores,
                                        columns = self.idx,
-                                       index   = pd.to_datetime(self.spot.index))
+                                       index   = pd.to_datetime(self.df.index))
 
         # PC scores (retained)
         self.eig_scores_k = self.eig_scores.iloc[:,:self.k]
@@ -94,16 +95,16 @@ class PCA(object):
                                    index   = self.eig_scores_k.index)
 
 
-    def pca_oos(self, eig_vect_train, spot_test):
+    def pca_oos(self, eig_vect_train, df_test):
         """
         This function derives the dimensionality reduction of out-of-sample data. This means, that Eigenvectors are fitted on train data,
         and are being applied to unseen test data.
         """
         # PC scores (all)
-        eig_scores_oos = np.matrix(spot_test) * np.matrix(eig_vect_train)
+        eig_scores_oos = np.matrix(df_test) * np.matrix(eig_vect_train)
         eig_scores_oos = pd.DataFrame(data    = eig_scores_oos,
                                       columns = self.idx,
-                                      index   = pd.to_datetime(spot_test.index))
+                                      index   = pd.to_datetime(df_test.index))
 
         # PC scores (retained)
         eig_scores_oos_k = eig_scores_oos.iloc[:,:self.k]

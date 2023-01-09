@@ -5,21 +5,11 @@ import pandas as pd
 import warnings
 
 # Disable depreciated warnings
-pd.set_option("mode.chained_assignment",None)
+pd.set_option("mode.chained_assignment", None)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-def import_rates(filename, filepath):
-    """
-    This function imports data from selected path.
-    Required parameters:
-     - filepath: str
-     - filename: str
-    """
-    return pd.read_csv(filepath+filename)
-
-
-def clean_rates(df, start, end, maturities, freq):
+def clean_rates(filepath:str, start:str, end:str, maturities:list, freq:str):
     """
     This function filters the data for the selected time frame, relevant maturities, frequency
     Required parameters:
@@ -29,6 +19,8 @@ def clean_rates(df, start, end, maturities, freq):
      - maturities: list
      - frequency: category (day, week, month)
     """
+
+    df = pd.read_csv(filepath)
 
     # Filter for time frame
     df["TIME_PERIOD"] = pd.to_datetime(df["TIME_PERIOD"], format="%Y-%m-%d")
@@ -91,11 +83,9 @@ def clean_rates(df, start, end, maturities, freq):
     df.columns = df.columns.get_level_values(1)
     df.index.name = None
     
-    
     # Rename columns to string format maturities
-    cols = [maturity_transform(i) for i in maturities]
+    cols = [maturity_str(i) for i in maturities]
     df.columns = cols
-
 
     # Filter df for selected frequency
     df["DATE"] = df.index
@@ -118,7 +108,7 @@ def clean_rates(df, start, end, maturities, freq):
     return df
 
 
-def maturity_transform(mat_int):
+def maturity_str(mat_int):
     """
     This function transforms years as decimals into strings according to %Y%M format.
     Required parameter: float (decimal divisor of 12)
