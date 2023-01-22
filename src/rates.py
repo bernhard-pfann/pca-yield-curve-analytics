@@ -9,7 +9,7 @@ pd.set_option("mode.chained_assignment", None)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-def clean_rates(filepath:str, start:str, end:str, maturities:list, freq:str):
+def clean_rates(input_path:str, start:str, end:str, maturities:list, freq:str):
     """
     This function filters the data for the selected time frame, relevant maturities, frequency
     Required parameters:
@@ -20,7 +20,7 @@ def clean_rates(filepath:str, start:str, end:str, maturities:list, freq:str):
      - frequency: category (day, week, month)
     """
 
-    df = pd.read_csv(filepath)
+    df = pd.read_csv(input_path)
 
     # Filter for time frame
     df["TIME_PERIOD"] = pd.to_datetime(df["TIME_PERIOD"], format="%Y-%m-%d")
@@ -102,7 +102,6 @@ def clean_rates(filepath:str, start:str, end:str, maturities:list, freq:str):
     df = df.groupby("COUNT").last()
 
     df.index = df["DATE"]
-    df.index.name = None
     df = df.drop(["FREQ","DATE"], axis = 1)
     
     return df

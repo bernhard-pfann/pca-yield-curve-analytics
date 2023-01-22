@@ -12,18 +12,20 @@ def main():
         os.makedirs("assets")
 
     download(
-        target_path = "assets/data.csv",
+        target_path = "assets/rates_raw.csv",
         start_date  = conf.start_date,
         end_date    = conf.end_date
     )
 
     df = clean_rates(
-        filepath   = "assets/data.csv", 
+        input_path = "assets/rates_raw.csv", 
         start      = conf.start_date, 
         end        = conf.end_date, 
         maturities = conf.maturities,
         freq       = conf.frequency
     )
+
+    df.to_csv("assets/rates_clean.csv")
 
     # Train-test split
     test_date = dt.strptime(conf.test_date, "%Y-%m-%d")
@@ -37,7 +39,7 @@ def main():
     pc_vectors_inv = mdl.eig_vect_inv_k
     pc_back_trans  = mdl.yields
     pc_idx         = mdl.idx[:conf.n_components]
-
+    print("DONE")
 
 if __name__ == "__main__":
     main()
