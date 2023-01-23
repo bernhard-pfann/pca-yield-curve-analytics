@@ -1,4 +1,5 @@
 import os
+from joblib import dump
 from datetime import datetime as dt
 
 from src.utils import download
@@ -33,6 +34,8 @@ def main():
     df_test = df[df.index >= test_date]
 
     mdl = PCA(df, k=conf.n_components)
+    
+    dump(mdl, "assets/pca.joblib")
 
     pc_scores      = mdl.eig_scores_k
     pc_vectors     = mdl.eig_vect_k

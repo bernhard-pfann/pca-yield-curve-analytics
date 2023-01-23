@@ -1,2 +1,0 @@
-1) Download input data from: https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_area_yield_curves/html/index.en.html
-2) Save input data as data.csv in this folder!
