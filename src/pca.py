@@ -86,9 +86,9 @@ class PCA(object):
         # Inverse transformation (retained)
         self.eig_vect_inv_k = self.eig_vect_inv.iloc[:self.k,:]
 
-        self.yields = np.matrix(self.eig_scores_k) * np.matrix(self.eig_vect_inv_k)
-        self.yields = pd.DataFrame(
-            data    = self.yields, 
+        self.rates = np.matrix(self.eig_scores_k) * np.matrix(self.eig_vect_inv_k)
+        self.rates = pd.DataFrame(
+            data    = self.rates, 
             columns = self.maturities,
             index   = self.eig_scores_k.index)
 
@@ -118,11 +118,11 @@ class PCA(object):
         # Inverse transformation (retained)
         eig_vect_inv_k = eig_vect_inv.iloc[:self.k,:]
 
-        yields = np.matrix(eig_scores_k) * np.matrix(eig_vect_inv_k)
-        yields = pd.DataFrame(
-            data    = yields, 
+        rates = np.matrix(eig_scores_k) * np.matrix(eig_vect_inv_k)
+        rates = pd.DataFrame(
+            data    = rates, 
             columns = self.maturities,
             index   = eig_scores_k.index
         )
         
-        return yields
+        return rates
