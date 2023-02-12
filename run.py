@@ -57,8 +57,6 @@ def main():
 
 
     dump(mdl, "assets/pca.joblib")
-    
-
 
     # pc_scores      = mdl.eig_scores_k
     # pc_vectors     = mdl.eig_vect_k
@@ -68,7 +66,6 @@ def main():
     
     # df_oos = mdl.backtrans_oos(df_test)
 
-    import pdb; pdb.set_trace()
     print("DONE")
 
 if __name__ == "__main__":
