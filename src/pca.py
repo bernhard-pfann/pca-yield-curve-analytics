@@ -13,7 +13,7 @@ class PCA(object):
         self.df = df
         self.maturities = df.columns
         self.k = k
-        
+
         self.get_cov_matrix()
         self.get_eig_vectors()
         self.get_eig_scores()
@@ -126,3 +126,44 @@ class PCA(object):
         )
         
         return rates
+
+    def get_eig_scores_stress(self, sigma: float, n_days: int):
+        """Return the eigen scores with added and subtracted rolling standard deviation"""
+
+        std  = self.eig_scores.rolling(n_days).std()*sigma
+        up   = (self.eig_scores + std).dropna()
+        down = (self.eig_scores - std).dropna()
+
+        return up, down
+
+    @staticmethod
+    def univariate_stress(self, pc: str, sigma: float, n_days: int) -> pd.DataFrame:
+        """Shocks only one principal component while keeping other constant"""
+        
+        k_cols = self.idx[:self.k]
+        unstressed_cols = [i for i in k_cols if i != pc]
+
+        df_up, df_down = self.get_eig_scores_stress(sigma=sigma, n_days=n_days)
+
+        df_up = pd.concat([self.eig_scores[unstressed_cols], df_up[pc]], axis=1).dropna()
+        df_down = pd.concat([self.eig_scores[unstressed_cols], df_down[pc]], axis=1).dropna()
+
+        df_up = df_up.reindex(k_cols, axis=1)
+        df_down = df_down.reindex(k_cols, axis=1)
+        
+        
+        df_up = pd.DataFrame(
+            data=np.matrix(df_up) * np.matrix(self.eig_vect_inv_k), 
+            columns=self.maturities,
+            index=self.eig_scores[n_days-1:].index
+        )
+
+        df_down = pd.DataFrame(
+            data=np.matrix(df_down) * np.matrix(self.eig_vect_inv_k), 
+            columns=self.maturities,
+            index=self.eig_scores[n_days-1:].index
+        )
+
+        return df_up, df_down
+
+    

@@ -11,3 +11,7 @@ frequency = "day"
 
 # Number of principal components
 n_components = 3
+
+# Stress scenario
+n_days = 30
+sigma_deviation = 2
