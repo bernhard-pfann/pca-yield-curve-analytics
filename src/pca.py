@@ -11,86 +11,110 @@ class PCA(object):
     """
     def __init__(self, df: pd.DataFrame, k: int):
         self.df = df
-        self.maturities = df.columns
+        self.maturities = self.df.columns
+        self.pc_names = list(["PC_"+str(i) for i in range(1, len(self.maturities)+1)])
         self.k = k
 
-        self.get_cov_matrix()
-        self.get_eig_vectors()
-        self.get_eig_scores()
+        self.cov                 = self.get_covariance(df=self.df, maturities=self.maturities)
+        self.eig_values          = self.get_eig_values(cov=self.cov, pc_names=self.pc_names)
+        self.eig_vectors         = self.get_eig_vectors(cov=self.cov, pc_names=self.pc_names, maturities=self.maturities)
+        self.eig_vectors_inverse = self.get_eig_vectors_inverse(eig_vectors=self.eig_vectors, maturities=self.maturities, pc_names=self.pc_names)
+        self.eig_scores          = self.get_eig_scores(df=self.df, eig_vectors=self.eig_vectors, pc_names=self.pc_names)
+
+        self.eig_vectors_k  = self.eig_vectors.iloc[:,:self.k]
+        self.eig_scores_k   = self.eig_scores.iloc[:,:self.k]
+        self.eig_vect_inv_k = self.eig_vect_inv.iloc[:self.k,:]
+
         self.backtrans()
         
-    def get_cov_matrix(self):
+    @staticmethod
+    def get_covariance(df: pd.DataFrame, maturities: list) -> pd.DataFrame:
         """
         Calculates the covariance matrix of all given maturities to each other over time 
         whole time horizon.
         """
-        self.cov_matr = np.array(self.df).T
-        self.cov_matr = np.cov(self.cov_matr, bias = True)
-        self.cov_matr = pd.DataFrame(
-            data    = self.cov_matr, 
-            columns = self.maturities, 
-            index   = self.maturities
+        cov = np.array(df).T
+        cov = np.cov(cov, bias = True)
+        cov = pd.DataFrame(
+            data=cov, 
+            columns=maturities, 
+            index=maturities
         )
-        
-    def get_eig_vectors(self):
+
+        return cov
+    
+    @staticmethod
+    def get_eig_values(cov: pd.DataFrame, pc_names: list) -> pd.DataFrame:
+        """Calculate the eigen vectors and return as dataframe"""
+        eig = np.linalg.eig(cov)
+        df = pd.DataFrame(
+            data=eig[0].real, 
+            columns=["value"], 
+            index=pc_names
+        )
+
+        df["relative"] = df["value"] / df["value"].sum()
+        df["cumulative"] = df["relative"].cumsum()   
+        return df     
+
+    @staticmethod
+    def get_eig_vectors(cov: pd.DataFrame, pc_names: list, maturities: list) -> pd.DataFrame:
         """
         Calculates the Eigenvectors. By definition these are the vectors that capture the 
         maximum variance of the underlying data, and can be found by minimizing the sum of 
         projection length to the respective vector.
         """
-        # Eigen decomposition
-        eig = np.linalg.eig(self.cov_matr)
-        self.idx = list(["PC_"+str(i) for i in range(1, eig[0].shape[0]+1)])
-
-        # Eigen values 
-        self.eig_vals = pd.DataFrame(eig[0].real, columns = ["eig_val"], index = self.idx)
-        self.eig_vals["eig_val_rel"] = self.eig_vals["eig_val"].apply(lambda x: x/self.eig_vals["eig_val"].sum())
-        self.eig_vals["eig_val_abs"] = self.eig_vals["eig_val_rel"].cumsum()
-
-        # Eigen vectors
-        self.eig_vect = pd.DataFrame(
-            data    = eig[1].real, 
-            index   = self.maturities, 
-            columns = self.idx,
+        eig = np.linalg.eig(cov)
+        df = pd.DataFrame(
+            data=eig[1].real, 
+            index=maturities, 
+            columns=pc_names,
         )
-        self.eig_vect_k = self.eig_vect.iloc[:,:self.k]
-        
-    def get_eig_scores(self):
+
+        return df 
+
+    @staticmethod
+    def get_eig_vectors_inverse(eig_vectors: pd.DataFrame, maturities: list, pc_names: list) -> pd.DataFrame:
+        """Calculates the inverse matrix from eigen vectors."""
+
+        df = pd.DataFrame(
+            data=np.linalg.inv(np.matrix(eig_vectors)),
+            columns=maturities,
+            index=pc_names
+        )
+
+        return df
+
+    @staticmethod 
+    def get_eig_scores(df: pd.DataFrame, eig_vectors: pd.DataFrame, pc_names: list) -> pd.DataFrame:
         """
         This function transforms the underlying data into the new dimensionality formed by the 
         Eigenvectors. Transformed datapointscan be labeled PC-scores.
         """
-        # PC scores (all)
-        self.eig_scores = np.matrix(self.df) * np.matrix(self.eig_vect)
-        self.eig_scores = pd.DataFrame(
-            data    = self.eig_scores,
-            columns = self.idx,
-            index   = pd.to_datetime(self.df.index)
+        eig_scores = np.matrix(df) * np.matrix(eig_vectors)
+        eig_scores = pd.DataFrame(
+            data=eig_scores,
+            columns=pc_names,
+            index=pd.to_datetime(df.index)
         )
 
-        # PC scores (retained)
-        self.eig_scores_k = self.eig_scores.iloc[:,:self.k]
-        
-    def backtrans(self):
+        return eig_scores
+
+    @staticmethod    
+    def get_backtrans_rates(eig_scores_k: pd.DataFrame, eig_vect_inv_k: pd.DataFrame, maturities: list):
         """
         This function retains only a limited set of PCs and transformes the PC-scores back to the 
         original coordinate system. Therefore the final output is in the same units as the input.
         """
-        
-        # Inverse transformation (all)
-        self.eig_vect_inv = pd.DataFrame(
-            data    = np.linalg.inv(np.matrix(self.eig_vect)),
-            columns = self.maturities,
-            index   = self.idx)
 
-        # Inverse transformation (retained)
-        self.eig_vect_inv_k = self.eig_vect_inv.iloc[:self.k,:]
+        df = np.matrix(eig_scores_k) * np.matrix(eig_vect_inv_k)
+        df = pd.DataFrame(
+            data=df, 
+            columns=maturities,
+            index=eig_scores_k.index
+        )
 
-        self.rates = np.matrix(self.eig_scores_k) * np.matrix(self.eig_vect_inv_k)
-        self.rates = pd.DataFrame(
-            data    = self.rates, 
-            columns = self.maturities,
-            index   = self.eig_scores_k.index)
+        return df
 
     def backtrans_oos(self, df_oos):
         """
@@ -127,7 +151,7 @@ class PCA(object):
         
         return rates
 
-    def get_eig_scores_stress(self, sigma: float, n_days: int):
+    def get_stressed_eig_scores(self, sigma: float, n_days: int):
         """Return the eigen scores with added and subtracted rolling standard deviation"""
 
         std  = self.eig_scores.rolling(n_days).std()*sigma
@@ -143,14 +167,16 @@ class PCA(object):
         k_cols = self.idx[:self.k]
         unstressed_cols = [i for i in k_cols if i != pc]
 
-        df_up, df_down = self.get_eig_scores_stress(sigma=sigma, n_days=n_days)
+        eig_scores_up, eig_scores_down = self.get_stressed_eig_scores(sigma=sigma, n_days=n_days)
 
-        df_up = pd.concat([self.eig_scores[unstressed_cols], df_up[pc]], axis=1).dropna()
-        df_down = pd.concat([self.eig_scores[unstressed_cols], df_down[pc]], axis=1).dropna()
-
-        df_up = df_up.reindex(k_cols, axis=1)
-        df_down = df_down.reindex(k_cols, axis=1)
+        df_up = pd.concat([self.eig_scores[unstressed_cols], eig_scores_up[pc]], axis=1) \
+            .dropna() \
+            .reindex(k_cols, axis=1)
+        df_down = pd.concat([self.eig_scores[unstressed_cols], eig_scores_down[pc]], axis=1) \
+            .dropna() \
+            .reindex(k_cols, axis=1)
         
+
         
         df_up = pd.DataFrame(
             data=np.matrix(df_up) * np.matrix(self.eig_vect_inv_k), 
