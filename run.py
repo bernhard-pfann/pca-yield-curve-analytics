@@ -13,6 +13,10 @@ def main():
         os.makedirs("assets")
     if not os.path.exists("assets/stress"):
         os.makedirs("assets/stress")
+    if not os.path.exists("assets/stress/rates"):
+        os.makedirs("assets/stress/rates")
+    if not os.path.exists("assets/stress/eig_scores"):
+        os.makedirs("assets/stress/eig_scores")
 
     lol = False
 
@@ -38,33 +42,29 @@ def main():
     df_train = df[df.index < test_date]
     df_test = df[df.index >= test_date]
 
-    mdl = PCA(df=df_train, k=conf.n_components)
-    
     df_train.to_csv("assets/train.csv")
     df_test.to_csv("assets/test.csv")
 
-    # Create scenarios where each principal component is stressed separately
-    for i in range(1, conf.n_components+1):
-        df_up, df_down = PCA.univariate_stress(
-            self=mdl, 
-            pc="PC_"+str(i), 
-            sigma=conf.sigma_deviation, 
-            n_days=conf.n_days
-        )
-        
-        df_up.to_csv("assets/stress/pc_"+str(i)+"_up.csv")
-        df_down.to_csv("assets/stress/pc_"+str(i)+"_down.csv")
+    mdl = PCA(df_train=df_train, df_test=df_test, k=conf.n_components)
 
+    # Create scenarios where each principal component is stressed separately
+
+    eig_scores_up = PCA.get_stressed_eig_scores(self=mdl, sigma=conf.sigma_deviation, direction=1, n_days=conf.n_days)
+    eig_scores_down = PCA.get_stressed_eig_scores(self=mdl, sigma=conf.sigma_deviation, direction=-1, n_days=conf.n_days)
+
+    eig_scores_up.to_csv("assets/stress/eig_scores/up.csv")
+    eig_scores_down.to_csv("assets/stress/eig_scores/down.csv")
+
+    for i in range(1, conf.n_components+1):
+
+        pc = "PC_"+str(i)
+        rates_up = PCA.univariate_stress(self=mdl, stressed_eig_scores=eig_scores_up, pc=pc)
+        rates_down = PCA.univariate_stress(self=mdl, stressed_eig_scores=eig_scores_down, pc=pc)
+
+        rates_up.to_csv("assets/stress/rates/"+pc+"_up.csv")
+        rates_down.to_csv("assets/stress/rates/"+pc+"_down.csv")
 
     dump(mdl, "assets/pca.joblib")
-
-    # pc_scores      = mdl.eig_scores_k
-    # pc_vectors     = mdl.eig_vect_k
-    # pc_vectors_inv = mdl.eig_vect_inv_k
-    # pc_back_trans  = mdl.yields
-    # pc_idx         = mdl.idx[:conf.n_components]
-    
-    # df_oos = mdl.backtrans_oos(df_test)
 
     print("DONE")
 

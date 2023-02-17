@@ -9,26 +9,21 @@ class PCA(object):
     system for PC-scores. By only retaining a few of the newly established dimensions, 
     the backtransformation into original units creates lower dimensional data model. 
     """
-    def __init__(self, df: pd.DataFrame, k: int):
-        self.df = df
-        self.maturities = self.df.columns
-        self.pc_names = list(["PC_"+str(i) for i in range(1, len(self.maturities)+1)])
+    def __init__(self, df_train: pd.DataFrame, df_test: pd.DataFrame, k: int):
+        
+        self.maturities = df_train.columns
+        self.components = list(["PC_"+str(i) for i in range(1, len(self.maturities)+1)])
         self.k = k
 
-        self.cov                 = self.get_covariance(df=self.df, maturities=self.maturities)
-        self.eig_values          = self.get_eig_values(cov=self.cov, pc_names=self.pc_names)
-        self.eig_vectors         = self.get_eig_vectors(cov=self.cov, pc_names=self.pc_names, maturities=self.maturities)
-        self.eig_vectors_inverse = self.get_eig_vectors_inverse(eig_vectors=self.eig_vectors, maturities=self.maturities, pc_names=self.pc_names)
-        self.eig_scores          = self.get_eig_scores(df=self.df, eig_vectors=self.eig_vectors, pc_names=self.pc_names)
-
-        self.eig_vectors_k  = self.eig_vectors.iloc[:,:self.k]
-        self.eig_scores_k   = self.eig_scores.iloc[:,:self.k]
-        self.eig_vect_inv_k = self.eig_vect_inv.iloc[:self.k,:]
-
-        self.backtrans()
+        self.cov                 = self.get_covariance(df_train)
+        self.eig_values          = self.get_eig_values(self.cov)
+        self.eig_vectors         = self.get_eig_vectors(self.cov)
+        self.eig_vectors_inverse = self.get_eig_vectors_inverse(self.eig_vectors)
+        self.eig_scores          = self.get_eig_scores(df=df_train, eig_vectors=self.eig_vectors)
+        self.backtrans_rates     = self.get_backtrans_rates(eig_scores=self.eig_scores, eig_vectors_inverse=self.eig_vectors_inverse)
+        self.backtrans_rates_oos = self.get_backtrans_rates_oos(df_test=df_test, eig_vectors=self.eig_vectors, eig_scores=self.eig_scores) 
         
-    @staticmethod
-    def get_covariance(df: pd.DataFrame, maturities: list) -> pd.DataFrame:
+    def get_covariance(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Calculates the covariance matrix of all given maturities to each other over time 
         whole time horizon.
@@ -37,56 +32,52 @@ class PCA(object):
         cov = np.cov(cov, bias = True)
         cov = pd.DataFrame(
             data=cov, 
-            columns=maturities, 
-            index=maturities
+            columns=self.maturities, 
+            index=self.maturities
         )
 
         return cov
     
-    @staticmethod
-    def get_eig_values(cov: pd.DataFrame, pc_names: list) -> pd.DataFrame:
+    def get_eig_values(self, cov: pd.DataFrame) -> pd.DataFrame:
         """Calculate the eigen vectors and return as dataframe"""
         eig = np.linalg.eig(cov)
-        df = pd.DataFrame(
+        eig_values = pd.DataFrame(
             data=eig[0].real, 
             columns=["value"], 
-            index=pc_names
+            index=self.components
         )
 
-        df["relative"] = df["value"] / df["value"].sum()
-        df["cumulative"] = df["relative"].cumsum()   
-        return df     
+        eig_values["relative"] = eig_values["value"] / eig_values["value"].sum()
+        eig_values["cumulative"] = eig_values["relative"].cumsum()   
+        return eig_values    
 
-    @staticmethod
-    def get_eig_vectors(cov: pd.DataFrame, pc_names: list, maturities: list) -> pd.DataFrame:
+    def get_eig_vectors(self, cov: pd.DataFrame) -> pd.DataFrame:
         """
         Calculates the Eigenvectors. By definition these are the vectors that capture the 
         maximum variance of the underlying data, and can be found by minimizing the sum of 
         projection length to the respective vector.
         """
         eig = np.linalg.eig(cov)
-        df = pd.DataFrame(
+        eig_vectors = pd.DataFrame(
             data=eig[1].real, 
-            index=maturities, 
-            columns=pc_names,
+            index=self.maturities, 
+            columns=self.components,
         )
 
-        return df 
+        return eig_vectors
 
-    @staticmethod
-    def get_eig_vectors_inverse(eig_vectors: pd.DataFrame, maturities: list, pc_names: list) -> pd.DataFrame:
+    def get_eig_vectors_inverse(self, eig_vectors: pd.DataFrame) -> pd.DataFrame:
         """Calculates the inverse matrix from eigen vectors."""
 
-        df = pd.DataFrame(
+        eig_vectors_inverse = pd.DataFrame(
             data=np.linalg.inv(np.matrix(eig_vectors)),
-            columns=maturities,
-            index=pc_names
+            columns=self.maturities,
+            index=self.components
         )
 
-        return df
+        return eig_vectors_inverse
 
-    @staticmethod 
-    def get_eig_scores(df: pd.DataFrame, eig_vectors: pd.DataFrame, pc_names: list) -> pd.DataFrame:
+    def get_eig_scores(self, df: pd.DataFrame, eig_vectors: pd.DataFrame) -> pd.DataFrame:
         """
         This function transforms the underlying data into the new dimensionality formed by the 
         Eigenvectors. Transformed datapointscan be labeled PC-scores.
@@ -94,102 +85,72 @@ class PCA(object):
         eig_scores = np.matrix(df) * np.matrix(eig_vectors)
         eig_scores = pd.DataFrame(
             data=eig_scores,
-            columns=pc_names,
+            columns=self.components,
             index=pd.to_datetime(df.index)
         )
 
         return eig_scores
 
-    @staticmethod    
-    def get_backtrans_rates(eig_scores_k: pd.DataFrame, eig_vect_inv_k: pd.DataFrame, maturities: list):
+    def get_backtrans_rates(self, eig_scores: pd.DataFrame, eig_vectors_inverse: pd.DataFrame):
         """
         This function retains only a limited set of PCs and transformes the PC-scores back to the 
         original coordinate system. Therefore the final output is in the same units as the input.
         """
+        eig_scores = eig_scores.iloc[:,:self.k]
+        eig_vectors_inverse = eig_vectors_inverse.iloc[:self.k,:]
 
-        df = np.matrix(eig_scores_k) * np.matrix(eig_vect_inv_k)
-        df = pd.DataFrame(
-            data=df, 
-            columns=maturities,
-            index=eig_scores_k.index
+        rates = np.matrix(eig_scores) * np.matrix(eig_vectors_inverse)
+        rates = pd.DataFrame(
+            data=rates, 
+            columns=self.maturities,
+            index=eig_scores.index
         )
 
-        return df
+        return rates
 
-    def backtrans_oos(self, df_oos):
+    def get_backtrans_rates_oos(self, 
+            df_test: pd.DataFrame, 
+            eig_vectors: pd.DataFrame, 
+            eig_scores: pd.DataFrame
+        ) -> pd.DataFrame:
         """
         This function derives the dimensionality reduction of out-of-sample data. This means, that 
         Eigenvectors are fitted on train data, and are being applied to unseen test data.
         """
-        # PC scores (all)
-        eig_scores = np.matrix(df_oos) * np.matrix(self.eig_vect)
-        eig_scores = pd.DataFrame(
-            data    = eig_scores,
-            columns = self.idx,
-            index   = df_oos.index
-        )
-
-        # PC scores (retained)
-        eig_scores_k = eig_scores.iloc[:,:self.k]
-        
-        # Inverse transformation (all)
-        eig_vect_inv = pd.DataFrame(
-            data    = np.linalg.inv(np.matrix(self.eig_vect)), 
-            columns = self.maturities, 
-            index   = self.idx
-        )
-
-        # Inverse transformation (retained)
-        eig_vect_inv_k = eig_vect_inv.iloc[:self.k,:]
-
-        rates = np.matrix(eig_scores_k) * np.matrix(eig_vect_inv_k)
-        rates = pd.DataFrame(
-            data    = rates, 
-            columns = self.maturities,
-            index   = eig_scores_k.index
-        )
+        eig_scores          = self.get_eig_scores(df=df_test, eig_vectors=eig_vectors)
+        eig_vectors_inverse = self.get_eig_vectors_inverse(eig_vectors=eig_vectors)
+        rates               = self.get_backtrans_rates(eig_scores=eig_scores, eig_vectors_inverse=eig_vectors_inverse)
         
         return rates
 
-    def get_stressed_eig_scores(self, sigma: float, n_days: int):
+    @staticmethod
+    def get_stressed_eig_scores(self, sigma: float, direction: int, n_days: int) -> pd.DataFrame:
         """Return the eigen scores with added and subtracted rolling standard deviation"""
 
         std  = self.eig_scores.rolling(n_days).std()*sigma
-        up   = (self.eig_scores + std).dropna()
-        down = (self.eig_scores - std).dropna()
-
-        return up, down
+        eig_scores = (self.eig_scores + std*direction).dropna()
+        
+        return eig_scores
 
     @staticmethod
-    def univariate_stress(self, pc: str, sigma: float, n_days: int) -> pd.DataFrame:
+    def univariate_stress(self, stressed_eig_scores: pd.DataFrame, pc: str) -> pd.DataFrame:
         """Shocks only one principal component while keeping other constant"""
         
-        k_cols = self.idx[:self.k]
-        unstressed_cols = [i for i in k_cols if i != pc]
+        k_components = self.components[:self.k]
+        k_components_not = [i for i in k_components if i != pc]
 
-        eig_scores_up, eig_scores_down = self.get_stressed_eig_scores(sigma=sigma, n_days=n_days)
+        stressed_eig_scores = stressed_eig_scores[pc]
+        unstressed_eig_scores = self.eig_scores[k_components_not]
 
-        df_up = pd.concat([self.eig_scores[unstressed_cols], eig_scores_up[pc]], axis=1) \
+        mixed_eig_scores = pd.concat([unstressed_eig_scores, stressed_eig_scores], axis=1) \
             .dropna() \
-            .reindex(k_cols, axis=1)
-        df_down = pd.concat([self.eig_scores[unstressed_cols], eig_scores_down[pc]], axis=1) \
-            .dropna() \
-            .reindex(k_cols, axis=1)
-        
+            .reindex(k_components, axis=1)
 
-        
-        df_up = pd.DataFrame(
-            data=np.matrix(df_up) * np.matrix(self.eig_vect_inv_k), 
-            columns=self.maturities,
-            index=self.eig_scores[n_days-1:].index
+        eig_vectors_inverse = self.eig_vectors_inverse.iloc[:self.k,:]
+
+        rates = self.get_backtrans_rates(
+            eig_scores=mixed_eig_scores, 
+            eig_vectors_inverse=eig_vectors_inverse
         )
 
-        df_down = pd.DataFrame(
-            data=np.matrix(df_down) * np.matrix(self.eig_vect_inv_k), 
-            columns=self.maturities,
-            index=self.eig_scores[n_days-1:].index
-        )
-
-        return df_up, df_down
-
-    
+        return rates
