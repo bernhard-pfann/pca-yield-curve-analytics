@@ -1,4 +1,5 @@
 import os
+import argparse
 from joblib import dump
 from datetime import datetime as dt
 
@@ -6,6 +7,7 @@ from src.utils import download
 from src.rates import clean_rates
 from src.pca import PCA
 import config as conf
+
 
 def main():
 
@@ -18,14 +20,34 @@ def main():
     if not os.path.exists("assets/stress/eig_scores"):
         os.makedirs("assets/stress/eig_scores")
 
-    lol = False
+    parser = argparse.ArgumentParser(
+        prog="python run.py",
+        description="Clean rates and performs PCA",
+        epilog=""
+    )
+    
+    parser.add_argument(
+        "-d", 
+        "--download-data",
+        action="store_true",
+        default=False,
+        required=False,
+        help="overwrite data"
+    )
 
-    if lol:
+    args = parser.parse_args()
+    download_trigger = args.download_data
+
+    if download_trigger:
         download(
             target_path = "assets/rates_raw.csv",
             start_date  = conf.start_date,
             end_date    = conf.end_date
         )
+
+        print("Download finished")
+    else:
+        print("Download skipped")
 
     df = clean_rates(
         input_path = "assets/rates_raw.csv", 
