@@ -1,3 +1,4 @@
+import os
 import urllib.request 
 import numpy as np
 import pandas as pd
@@ -7,9 +8,29 @@ from sklearn.preprocessing import StandardScaler
 from statsmodels.tsa.stattools import adfuller
 
 
-def download(target_path:str, end_date: str, start_date="2004-09-06"):
-    url = "https://sdw-wsrest.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.?startPeriod="+start_date+"&endPeriod="+end_date+"&format=csvdata"
-    urllib.request.urlretrieve(url, target_path)
+def download(target_path:str, end_date: str, overwrite: bool, start_date: str ="2004-09-06"):
+    """Download rates from ECB"""
+
+    if os.path.isfile(target_path) and not overwrite:
+        print("Download skipped")
+        return
+    else:
+        print("Download started")
+        url = "https://sdw-wsrest.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.?startPeriod="+start_date+"&endPeriod="+end_date+"&format=csvdata"
+        urllib.request.urlretrieve(url, target_path)
+        print("Download finished")
+
+
+def create_folders():
+    if not os.path.exists("assets"):
+        os.makedirs("assets")
+    if not os.path.exists("assets/stress"):
+        os.makedirs("assets/stress")
+    if not os.path.exists("assets/stress/rates"):
+        os.makedirs("assets/stress/rates")
+    if not os.path.exists("assets/stress/eig_scores"):
+        os.makedirs("assets/stress/eig_scores")
+
 
 def calc_rmse(a,b):
     se = (a-b)**2
