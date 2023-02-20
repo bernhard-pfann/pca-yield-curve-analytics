@@ -1,11 +1,17 @@
 import os
 import urllib.request 
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
 from statsmodels.tsa.stattools import adfuller
+
+
+def create_folders():
+    os.makedirs("assets/stress/rates", exist_ok=True)
+    os.makedirs("assets/stress/eig_scores", exist_ok=True)
 
 
 def download(target_path:str, end_date: str, overwrite: bool, start_date: str ="2004-09-06"):
@@ -21,21 +27,11 @@ def download(target_path:str, end_date: str, overwrite: bool, start_date: str ="
         print("Download finished")
 
 
-def create_folders():
-    if not os.path.exists("assets"):
-        os.makedirs("assets")
-    if not os.path.exists("assets/stress"):
-        os.makedirs("assets/stress")
-    if not os.path.exists("assets/stress/rates"):
-        os.makedirs("assets/stress/rates")
-    if not os.path.exists("assets/stress/eig_scores"):
-        os.makedirs("assets/stress/eig_scores")
-
-
 def calc_rmse(a,b):
     se = (a-b)**2
     rmse = np.sqrt(se.mean(axis=1))
     return rmse
+
 
 def std_scale_pandas(df):
     """Performs standard scaling and retains index & columns of dataframe."""
@@ -52,6 +48,7 @@ def std_scale_pandas(df):
 
     return df
 
+
 def rainbow(categories):
     """Generates a dictionary of color codes for each category."""
     c_scale = plt.cm.rainbow(np.linspace(0,1,len(categories)))
@@ -61,6 +58,7 @@ def rainbow(categories):
         c_dict[i] = c
         
     return c_dict
+
 
 def adf_test(df, col, alpha):
     """

@@ -2,14 +2,13 @@ import argparse
 from joblib import dump
 from datetime import datetime as dt
 
-from src.utils import download
+from src.utils import create_folders, download
 from src.rates import clean_rates
 from src.pca import PCA
 import config as conf
 
 
 def main():
-
     parser = argparse.ArgumentParser(
         prog="python run.py",
         description="Clean rates and performs PCA",
@@ -31,7 +30,8 @@ def main():
     ############
     # DOWNLOAD #
     ############
-
+    
+    create_folders()
     download(
         target_path = "assets/rates_raw.csv",
         start_date  = conf.start_date,
