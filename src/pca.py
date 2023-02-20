@@ -9,19 +9,18 @@ class PCA(object):
     system for PC-scores. By only retaining a few of the newly established dimensions, 
     the backtransformation into original units creates lower dimensional data model. 
     """
-    def __init__(self, df_train: pd.DataFrame, df_test: pd.DataFrame, k: int):
+    def __init__(self, df: pd.DataFrame, k: int):
         
-        self.maturities = df_train.columns
+        self.maturities = df.columns
         self.components = list(["PC_"+str(i) for i in range(1, len(self.maturities)+1)])
         self.k = k
 
-        self.cov                 = self.get_covariance(df_train)
+        self.cov                 = self.get_covariance(df)
         self.eig_values          = self.get_eig_values(self.cov)
         self.eig_vectors         = self.get_eig_vectors(self.cov)
         self.eig_vectors_inverse = self.get_eig_vectors_inverse(self.eig_vectors)
-        self.eig_scores          = self.get_eig_scores(df=df_train, eig_vectors=self.eig_vectors)
+        self.eig_scores          = self.get_eig_scores(df=df, eig_vectors=self.eig_vectors)
         self.backtrans_rates     = self.get_backtrans_rates(eig_scores=self.eig_scores, eig_vectors_inverse=self.eig_vectors_inverse)
-        self.backtrans_rates_oos = self.get_backtrans_rates_oos(df_test=df_test, eig_vectors=self.eig_vectors, eig_scores=self.eig_scores) 
         
     def get_covariance(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -108,17 +107,14 @@ class PCA(object):
 
         return rates
 
-    def get_backtrans_rates_oos(self, 
-            df_test: pd.DataFrame, 
-            eig_vectors: pd.DataFrame, 
-            eig_scores: pd.DataFrame
-        ) -> pd.DataFrame:
+    @staticmethod
+    def get_backtrans_rates_oos(self, df_test: pd.DataFrame) -> pd.DataFrame:
         """
         This function derives the dimensionality reduction of out-of-sample data. This means, that 
         Eigenvectors are fitted on train data, and are being applied to unseen test data.
         """
-        eig_scores          = self.get_eig_scores(df=df_test, eig_vectors=eig_vectors)
-        eig_vectors_inverse = self.get_eig_vectors_inverse(eig_vectors=eig_vectors)
+        eig_scores          = self.get_eig_scores(df=df_test, eig_vectors=self.eig_vectors)
+        eig_vectors_inverse = self.get_eig_vectors_inverse(self.eig_vectors)
         rates               = self.get_backtrans_rates(eig_scores=eig_scores, eig_vectors_inverse=eig_vectors_inverse)
         
         return rates

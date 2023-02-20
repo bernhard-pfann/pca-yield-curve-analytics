@@ -5,12 +5,10 @@ from statsmodels.tsa.ar_model import AR
 
 class Model(object):
     """
-    This class is fitting and predicting a time series, based on a simple autoregressive-model. Only significant lags are considered.
+    This class is fitting and predicting a time series, based on a simple 
+    autoregressive-model. Only significant lags are considered.
     """
     def __init__(self, train, test, last_train, alpha, diff):
-        """
-        The class is initialized to transfored external parameters into class properties.
-        """
 
         self.train, self.test, self.last_train = train, test, last_train
         self.models_init, self.models_param = dict(), dict()

@@ -30,7 +30,7 @@ def main():
     ############
     # DOWNLOAD #
     ############
-    
+
     create_folders()
     download(
         target_path = "assets/rates_raw.csv",
@@ -65,6 +65,9 @@ def main():
     ########################
 
     mdl = PCA(df_train=df_train, df_test=df_test, k=conf.n_components)
+
+    import pdb; pdb.set_trace()
+
     dump(mdl, "assets/pca.joblib")
 
     # Create scenarios where each principal component is stressed separately
