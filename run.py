@@ -64,7 +64,9 @@ def main():
     # PRINCIPAL COMPONENTS #
     ########################
 
-    mdl = PCA(df_train=df_train, df_test=df_test, k=conf.n_components)
+    mdl = PCA(df=df_train, k=conf.n_components)
+
+    PCA.get_backtrans_rates_oos(self=mdl, df_test=df_test)
 
     import pdb; pdb.set_trace()
 
