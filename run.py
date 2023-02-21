@@ -64,24 +64,22 @@ def main():
     # PRINCIPAL COMPONENTS #
     ########################
 
-    mdl = PCA(df=df_train, k=conf.n_components)
+    mdl_1 = PCA(df=df_train, k=conf.n_components)
+    mdl_2 = PCA(df=df.iloc[:-1], k=conf.n_components)
 
-    PCA.get_backtrans_rates_oos(self=mdl, df_test=df_test)
-
-    import pdb; pdb.set_trace()
-
-    dump(mdl, "assets/pca.joblib")
+    dump(mdl_1, "assets/pca_train.joblib")
+    dump(mdl_2, "assets/pca_full.joblib")
 
     # Create scenarios where each principal component is stressed separately
     eig_scores_up = PCA.get_stressed_eig_scores(
-        self=mdl, 
+        self=mdl_2, 
         sigma=conf.sigma_deviation, 
         direction=1, 
         n_days=conf.n_days
     )
     
     eig_scores_down = PCA.get_stressed_eig_scores(
-        self=mdl, 
+        self=mdl_2, 
         sigma=conf.sigma_deviation, 
         direction=-1, 
         n_days=conf.n_days
@@ -93,8 +91,8 @@ def main():
     for i in range(1, conf.n_components+1):
 
         pc = "PC_"+str(i)
-        rates_up = PCA.univariate_stress(self=mdl, stressed_eig_scores=eig_scores_up, pc=pc)
-        rates_down = PCA.univariate_stress(self=mdl, stressed_eig_scores=eig_scores_down, pc=pc)
+        rates_up = PCA.univariate_stress(self=mdl_2, stressed_eig_scores=eig_scores_up, pc=pc)
+        rates_down = PCA.univariate_stress(self=mdl_2, stressed_eig_scores=eig_scores_down, pc=pc)
 
         rates_up.to_csv("assets/stress/rates/"+pc+"_up.csv")
         rates_down.to_csv("assets/stress/rates/"+pc+"_down.csv")
